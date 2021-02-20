@@ -1,0 +1,23 @@
+{
+  "name": "react1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "watch": {
+    "start": {
+      "patterns": "**/*.js",
+      "quiet": true,
+      "silent": true,
+      "clearBuffer": true
+    }
+  },
+  "scripts": {
+    "watch": "npm-watch",
+    "start": "clear && node src/index"
+  },
+  "author": "Nico Tejera",
+  "license": "ISC",
+  "dependencies": {
+    "npm-watch": "^0.7.0"
+  }
+}
