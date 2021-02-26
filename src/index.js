@@ -1,11 +1,16 @@
-const arr = [1, 2, 3, 4, 5];
+this.name = 'Outer';
 
-const reduced = arr.reduce((acc, curr, currIndex, arr) => {
-  if (curr % 2 === 0) {
-    return [...acc, `${curr} is even`];
-  } else {
-    return acc;
-  }
-}, []);
+const obj = {
+  name: 'Inner',
+  arrow: () => {
+    console.log('Arrow:\t\t' + this.name);
+    console.log(this);
+  },
+  traditional() {
+    console.log('Traditional:\t' + this.name);
+    console.log(this);
+  },
+};
 
-console.log(reduced);
+obj.arrow();
+obj.traditional();

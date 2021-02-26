@@ -3,8 +3,8 @@
  *****************************************************************************/
 var old = 1;
 
-// Can be re-assigned
-old = 2;
+// Can be re-assigned to different types
+old = 'a';
 
 // const
 const fixed = 1;
@@ -13,6 +13,7 @@ fixed = 2;
 
 // let
 let variable = 1;
+// Can be re-assigned to different types
 variable = 2;
 
 // Scope ----------------------------------------------------
@@ -44,11 +45,13 @@ if (1 === 1) {
  *****************************************************************************/
 
 function oldFunction(a, b) {
-  console.log('here!', arguments, a, b);
-  console.log(this);
+  log('here!', arguments, a, b);
+  log(JSON.stringify(arguments));
+  log(this);
 }
 
 // Arrow functions do NOT have the arguments object
+arguments = null;
 const newFunction1 = (a, b) => {
   console.log('here!', arguments, a, b);
   console.log(this);
@@ -63,7 +66,7 @@ const newFunction2 = (a) => console.log(a);
 // In object's methods, avoid arrow functions since this is not bound to the object
 this.name = 'Outer';
 
-let obj = {
+const obj = {
   name: 'Inner',
   arrow: () => {
     console.log('Arrow:\t\t' + this.name);
@@ -93,9 +96,9 @@ class Sample {
   }
   // Invalid syntax but it actually works in Create React App
   // and is recommended
-  // invalid = () => {
-  //   console.log('this is:', this);
-  // };
+  invalid = () => {
+    console.log('this is:', this);
+  };
 }
 
 // Omit keys that have the same names
@@ -144,6 +147,12 @@ const [, , third] = arr;
 
 const test = 'abc';
 const [a] = test;
+
+// To rename the extracted variable
+const o1 = { a: 1 };
+const o2 = { a: 1 };
+const { a: o1_a } = o1;
+const { a: o2_a } = o1;
 
 // Go crazy
 const crazy = [
@@ -216,6 +225,7 @@ const sheep = {
 
 const clone = { ...sheep };
 clone.a = 'modA';
+// Be careful because this modifies the original object!
 clone.c.d = 'modD';
 console.log(sheep.a, clone.a);
 console.log(sheep.c.d, clone.c.d);
@@ -287,11 +297,13 @@ const p2 = new Promise((resolve, reject) => {
   }
 });
 
+// This will expect ALL promises to succeed, if one fails, the whole thing fails
+// the first promise to fail is the one that breaks all of it
 Promise.all([p1, p2]).then((r) => {
   console.log(r);
 });
 
-// Running promises sequentially
+// Sequencing thens
 p1.then((r) => {
   console.log(r);
   return r * 2;
@@ -376,13 +388,13 @@ f();
  *****************************************************************************/
 const arr = ['a', 'b', 'c', 'd'];
 
-// Map returns some value for each item
-const res1 = arr.map((letter) => {
+// For each does not return anything
+const res2 = arr.forEach((letter) => {
   return `letter is ${letter}`;
 });
 
-// For each does not return anything
-const res2 = arr.forEach((letter) => {
+// Map returns some value for each item
+const res1 = arr.map((letter) => {
   return `letter is ${letter}`;
 });
 
