@@ -1,16 +1,16 @@
-this.name = 'Outer';
+const p = new Promise((resolve, reject) => {
+  console.log('started');
 
-const obj = {
-  name: 'Inner',
-  arrow: () => {
-    console.log('Arrow:\t\t' + this.name);
-    console.log(this);
-  },
-  traditional() {
-    console.log('Traditional:\t' + this.name);
-    console.log(this);
-  },
-};
+  setTimeout(() => {
+    console.log('resolve');
+    resolve(true);
+  }, 1000);
 
-obj.arrow();
-obj.traditional();
+  console.log('return from promise');
+});
+
+// p.then(r => {
+//   console.log(r);
+// }).catch(e => {
+//   console.log(e);
+// });

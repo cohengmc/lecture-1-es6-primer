@@ -43,14 +43,15 @@ if (1 === 1) {
 /******************************************************************************
  * Functions
  *****************************************************************************/
-
 function oldFunction(a, b) {
-  log('here!', arguments, a, b);
-  log(JSON.stringify(arguments));
-  log(this);
+  console.log('here!', arguments, a, b);
+  console.log(JSON.stringify(arguments));
+  console.log(this);
 }
 
 // Arrow functions do NOT have the arguments object
+// if we don't set arguments to null, it will print the
+// arguments object of the outer "function", which is our script
 arguments = null;
 const newFunction1 = (a, b) => {
   console.log('here!', arguments, a, b);
@@ -84,20 +85,18 @@ obj.traditional();
 /*****************************************************************************
  * Classes
  *****************************************************************************/
-class Sample {
+ class Sample {
   constructor() {
     this.a = 1;
-    this.arrow = () => {
-      console.log('Arrow\t\t', this);
+    this.arrow2 = () => {
+      console.log('Arrow 2\t\t', this);
     };
   }
   traditional() {
     console.log('Traditional\t', this);
   }
-  // Invalid syntax but it actually works in Create React App
-  // and is recommended
-  invalid = () => {
-    console.log('this is:', this);
+  arrow1 = () => {
+    console.log('Arrow 1\t\t', this);
   };
 }
 
@@ -126,8 +125,8 @@ const { a } = destructure;
 const {
   b: { c },
 } = destructure;
-console.log(b); // Invalid, b is not defined
 console.log(c);
+console.log(b); // Invalid, b is not defined
 
 const {
   b: { d },
@@ -164,14 +163,15 @@ const crazy = [
   },
 ];
 
+// Extract 'y' and assign it to a variable called myY
 const [
   ,
   ,
   {
-    b: [x],
+    b: [, myY],
   },
 ] = crazy;
-console.log(x);
+console.log(myY);
 
 // For function arguments
 function func({ arg1, arg2, arg3 }) {
@@ -258,18 +258,26 @@ const p = new Promise((resolve, reject) => {
   }
 });
 
+// Make sure to catch errors
+p.then(r => {
+  console.log(r);
+}).catch(e => {
+  console.log(e);
+});
+
 // Promise body is executed immediately
 const p = new Promise((resolve, reject) => {
-  l('started');
+  console.log('started');
 
   setTimeout(() => {
-    l('resolve');
+    console.log('resolve');
     resolve(true);
   }, 1000);
 
-  l('return from promise');
+  console.log('return from promise');
 });
 
+// Even if this is never executed, the promise is still resolved
 p.then((r) => {
   console.log('success', r);
 })
