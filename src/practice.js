@@ -5,7 +5,9 @@ import fetch from 'node-fetch';
  * resolves to 'E-39'
  */
 export const practice1 = () => {
-  // TODO
+  return new Promise((resolve, reject) => {
+    resolve('E-39');
+  });
 };
 
 /**
@@ -35,7 +37,7 @@ export const practice4 = n => {
 /**
  * Write a function that receives a single character and returns a Promise that:
  * if the input is undefined or length different than 1, reject immediately with 'error
- * if the character is a number, resolves after 1 seecond to 'number'
+ * if the character is a number, resolves after 1 second to 'number'
  * if the character is a vowel, resolves after 2 seconds to 'vowel'
  * else resolves after 3 seconds to 'consonant'
  */
@@ -55,6 +57,4 @@ export const practice5 = c => {
  *
  * API: https://api.chucknorris.io/jokes/random
  */
-export const practice6 = category => {
-  // TODO
-};
+export const practice6 = category => {};
