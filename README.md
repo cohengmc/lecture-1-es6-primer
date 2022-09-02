@@ -567,3 +567,117 @@ const reduced = arr.reduce((acc, curr, currIndex, arr) => {
   }
 }, []);
 ```
+
+## Default Values
+There are many scenarios where we need to assign a default value to a variable if one is not provided.
+
+### For functions
+As mentioned above, destructing arguments in functions is extremely handy. But what happens if a function that destruct arguments is called *without* arguments?
+
+```js
+const func = ({ a, b }) => {
+  return a + b;
+}
+
+// This will throw an exception!
+func();
+```
+
+To fix this, we can assign a default value as:
+
+```js
+const func = ({ a, b } = {}) => {
+  return a + b;
+}
+
+// Now this will work
+func();
+```
+
+Although this works, it doesn't produce a necessarily valid result since it returns `NaN`. We can adjust to have default values for `a` and `b` respectively as follows:
+
+```js
+const func = ({ a, b } = { a: 0, b: 0 }) => {
+  return a + b;
+}
+
+func();
+```
+
+### For variables
+There are cases were we need to avoid `undefined` variables, so we need to assign a default value to them. Although we can do this using the `||` operator - if the left hand side is *truthful* that is the value our variable gets, otherwise it resolves to the right hand side. However, some expressions in JS are unexpectedly *falsy*. For example:
+
+```js
+const a = 0 || -1; // 0 is considered falsy, so this results in a being -1;
+const b = '' || 'default'; // an empty string is also falsy so this results in b being 'default';
+```
+
+To avoid these issues, we can resort to the nullish coalescing operator, which returns it's right-hand side operand when the left-hand side is either `null` or `undefined`:
+
+```js
+const a = 0 ?? -1; // a is now 0
+const b = '' ?? 'default'; // b is now ''
+const c = null ?? 'def'; // c is now 'def'
+```
+
+### `NULL` vs `undefined`
+
+All languages have a concept of `NULL`, as a placeholder for something that just has no value. In JS, and most non-typed (or dynamically-typed languages), there is also the concept of `undefined`, as a variable that simply has not been *defined*:
+
+```js
+let a; // As undefined
+let b = null; // b is defined and has a NULL value
+```
+
+### The `===` operator
+Comparing values is one of the most common operations in a program. In JS, comparing values using the traditional `==` can sometimes lead to unexpected results:
+
+```js
+// Expected:
+1 == 1      // true
+'a' == 'a'  // true
+{ a: 1 } == { a: 1 } // false => these are not the same reference!
+
+// Unexpected
+1 == '1'    // true
+0 == ''     // true => they're both falsy statements, hence they're considered ==
+undefined == null // true
+```
+
+However, to avoid these confusing examples, we can use the `===` operator, which compares the types of values as well:
+
+```js
+1 === 1     // true
+'a' === 'a' // true
+{ a: 1 } === { a: 1 } // false
+1 === '1'   // false
+0 === ''     // false
+undefined === null // false
+```
+
+### Compilation vs Interpretation vs Hoisting
+These concepts are quite confusing so we'll start with defining them.
+
+**Compilation**: Before a compiled language can be executed by a machine, it needs to be converted into bytecode by a compiler.
+
+**Interpretation**: Interpreted languages, like Javascript, are supposedly not compiled, but simply "executed". However, there are a few misconceptions to clarify:
+- Javascript is actually compiled, just not ahead of time into a binary like a traditional compiled language. Most browsers use a JIT (Just-In-Time compiler) to compile the language just as its about to run.
+- A JS program is executed in two phases. First, the interpreter reads the entire code (parsing), which is when hoisting occurs. Only then is the code actually executed.
+
+**Hoisting**: Hoisting is a JavaScript mechanism where variables and function declarations are moved to the top of their scope before code execution. Note that only variable declarations are moved, but not assignment of values.
+
+Because of this, in the following code, during the first phase, `a` is initialized to `undefined` and then it can actually run:
+
+```js
+console.log(a); // undefined
+var a;
+```
+
+However, even though `let` and `const` variables are also hoisted (i.e. their declaration moved to the top), they are not *initialized*. 
+
+```js
+console.log(a); // ReferenceError: Cannot access 'a' before initialization
+let a;
+```
+
+Note how the error is NOT telling us that `a` does't exist, but rather that it's not *initialized*.
